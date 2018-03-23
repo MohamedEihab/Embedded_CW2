@@ -248,7 +248,7 @@ void setMotor(){
             intStateOld = intState;
             motorOut((intState-orState+lead+6)%6, setTorque); //+6 to make sure the remainder is positive
         }
-    }
+}
 
 void commOutFn(){
     while(1) {
@@ -312,7 +312,7 @@ void commInFn(){
 //                    lead = 2;
 //                }
 //                else{
-                    maxspeed = speed; 
+                maxspeed = speed; 
                 
                 putMessage(6,maxspeed);
             } else if (charBuffer[0] == 'K'){
@@ -368,18 +368,17 @@ void motorCtrlFn(){
        // //putMessage(4, velocity);
         if(i < 10){
             i++;
-            }else{
-                i = 0;
-                //printf("The velocity is123: %d %d %d and the current position is: %d\n\r", velocity, motorPosition, lastPosition, motorPosition);
-                putMessage(4, velocity);
-                putMessage(5, motorPosition);
-                }
+        }else{
+            i = 0;
+            //printf("The velocity is123: %d %d %d and the current position is: %d\n\r", velocity, motorPosition, lastPosition, motorPosition);
+            putMessage(4, velocity);
+            putMessage(5, motorPosition);
+        }
         if(maxspeed == 0){
             speedout = 1000;
             lead = 2;
-            } else{
-        speedout = (maxspeed*6-abs(velocity));
-        
+        }else{
+            speedout = (maxspeed*6-abs(velocity));
         }
 
         /*if((setpos - motorPosition) >=0){
@@ -388,37 +387,37 @@ void motorCtrlFn(){
                 speedout *= -1;
                 }*/
         if(abs(speedout) < 1000){
-        setTorqueS = abs(speedout);
+            setTorqueS = abs(speedout);
         }else{
             setTorqueS = 1000;
-            }
+        }
             
         //printf("The speed controller output is: %d", speedout);
         if(speedout < 0){
-                lead = -2;
-            }else{
-                lead = 2;
-            }
+            lead = -2;
+        }else{
+            lead = 2;
+        }
             //setTorque = setTorqueS;
 
             //STOP HERE
 
 
             
-            //kp, kd
+            //kp = 10, kd = 10
             //Er - currentError
             //yr - setTorque
             
             //
         //if(pos==1){
             
-            currentErr = setpos - (motorPosition/6);
-            //putMessage(4, currentErr - setpos);
-            setTorqueR = (25*currentErr) + (currentErr - setpos);
-            //putMessage(5, motorPosition);
-            setpos = currentErr; 
+        currentErr = setpos - (motorPosition/6);
+        //putMessage(4, currentErr - setpos);
+        setTorqueR = (25*currentErr) + (currentErr - setpos);
+        //putMessage(5, motorPosition);
+        setpos = currentErr; 
 
-            //setTorque = setTorqueR;
+        //setTorque = setTorqueR;
         //}
         
         if(velocity >= 0){
@@ -427,27 +426,28 @@ void motorCtrlFn(){
                   //  setTorque_mutex.lock();
                     setTorque = setTorqueR;
                    // setTorque_mutex.unlock();
-                    }
+                }
                 else{
                     //printf("v > 0; torque_q higher\n\r");
 //                    setTorque_mutex.lock();
                     setTorque = setTorqueS;
   //                  setTorque_mutex.unlock();
-                    }}
+                    }
+        }
         else{
                 if(setTorqueR > setTorqueS){
                     //printf("v < 0; torque_q greater\n\r");
                     //setTorque_mutex.lock();
                     setTorque = setTorqueR;
                     //setTorque_mutex.unlock();
-                    }
+                }
                 else{
                   // printf("v < 0; torque_q lower\n\r");
                     //setTorque_mutex.lock();
                     setTorque = setTorqueS;
                     //setTorque_mutex.unlock();
-                    }
-            }
+                }
+         }
                
         /*
         if (setSpeed){
